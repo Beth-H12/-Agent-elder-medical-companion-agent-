@@ -10,6 +10,8 @@ from app.main import app
 from app.schemas.models import IntakeRequest
 from app.services.map_service import MapService
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
 
 def setup_function() -> None:
     init_db()
@@ -208,7 +210,7 @@ def test_text_archive_saved_under_date_department_and_issue_bucket() -> None:
         assert payload["archived_document"]["issue_status"] == "无问题"
         assert "/2026-04-10-心内科/无问题" in payload["archived_document"]["storage_directory"]
         note_url = payload["archived_document"]["note_file_url"]
-        note_path = Path("E:/hospital/static") / note_url.removeprefix("/static/")
+        note_path = PROJECT_ROOT / "static" / note_url.removeprefix("/static/")
         assert note_path.exists()
 
 
