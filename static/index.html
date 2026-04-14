@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>银龄就医陪诊 Agent</title>
+    <link rel="stylesheet" href="/static/styles.css?v=20260414-elder-ui-v11" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="utility-bar">
+        <div class="utility-copy">
+          <span class="utility-badge">长者友好模式</span>
+          <span class="utility-text">看不清时可以随时把字调大一些。</span>
+        </div>
+        <div class="font-controls" role="group" aria-label="字号调节">
+          <span class="font-controls-label">字号调节</span>
+          <button type="button" class="font-size-button" data-font-size="small">小字</button>
+          <button type="button" class="font-size-button is-active" data-font-size="medium">标准</button>
+          <button type="button" class="font-size-button" data-font-size="large">大字</button>
+        </div>
+      </section>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">陪您一步一步看病</p>
+          <h1>银龄就医陪诊 Agent</h1>
+          <p class="subtitle">
+            从说出哪里不舒服，到挑一家更顺路的医院、查看挂号提醒，再到保存检查资料，我们会把步骤讲清楚、把重点放大给您看。
+          </p>
+          <div class="hero-feature-block" aria-label="系统能力说明">
+            <div class="hero-block-title">系统可以帮您做这些事</div>
+            <div class="hero-feature-list">
+              <span class="hero-feature-chip">听懂老人说法</span>
+              <span class="hero-feature-chip">推荐更顺路医院</span>
+              <span class="hero-feature-chip">帮记挂号与候诊位置</span>
+              <span class="hero-feature-chip">保存检查图片和报告</span>
+            </div>
+          </div>
+          <div class="quick-nav-block">
+            <div class="hero-block-title">点击下面按钮可直接跳到对应步骤</div>
+            <div class="quick-nav" aria-label="模块快捷跳转">
+              <button type="button" class="quick-nav-button" data-scroll-target="module-intake">
+                <span class="quick-nav-button-label">先说说哪里不舒服</span>
+                <span class="quick-nav-button-tip">点击进入第 1 步</span>
+              </button>
+              <button type="button" class="quick-nav-button" data-scroll-target="module-booking">
+                <span class="quick-nav-button-label">选择医院并查看到院提醒</span>
+                <span class="quick-nav-button-tip">点击进入第 2 步</span>
+              </button>
+              <button type="button" class="quick-nav-button" data-scroll-target="module-document">
+                <span class="quick-nav-button-label">保存检查资料与后续提醒</span>
+                <span class="quick-nav-button-tip">点击进入第 3 步</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="stat-label">贴心陪诊流程</div>
+          <div class="stat-value">4 个步骤</div>
+          <div class="stat-small">说说哪里不舒服 → 选一家合适医院 → 看挂号和到院提醒 → 保存检查资料</div>
+          <div class="hero-card-tip">界面里的重点内容会自动加粗，方便老人和家属一起查看。</div>
+        </div>
+      </section>
+
+      <section id="module-intake" class="grid section-anchor">
+        <form id="intake-form" class="panel">
+          <div class="section-heading">
+            <h2>先说说哪里不舒服</h2>
+            <p class="section-subtitle">告诉我们现在在哪儿、怎么出门、哪里难受，我们会先帮您看该挂什么科，再推荐附近医院。</p>
+          </div>
+          <label>
+            当前地点
+            <input name="current_location" value="浦东新区" />
+          </label>
+          <label>
+            出行方式
+            <select name="transport_mode">
+              <option value="metro">地铁</option>
+              <option value="bus">公交</option>
+              <option value="taxi">打车</option>
+              <option value="walking">步行</option>
+            </select>
+          </label>
+          <label>
+            想什么时候去
+            <input name="preferred_time" value="明天上午" />
+          </label>
+          <label>
+            症状描述
+            <textarea name="symptom_text">最近胸口发闷，有时候喘不上气，走快一点就难受。</textarea>
+          </label>
+          <button type="submit">生成分诊与推荐</button>
+        </form>
+
+        <div class="panel">
+          <div class="panel-topline">
+            <div class="section-heading section-heading-compact">
+              <h2>推荐结果</h2>
+              <p class="section-subtitle">重要内容会加粗显示，方便老人直接看重点。</p>
+            </div>
+            <button type="button" id="toggle-intake-result-top" class="collapse-button" data-collapse-target="intake" aria-expanded="true">
+              收起详细结果
+            </button>
+          </div>
+          <div id="intake-result-summary" class="collapsed-summary muted">展开后可查看完整推荐结果。</div>
+          <div id="intake-result-wrap" class="result-wrap">
+            <div id="intake-result" class="result muted">等待生成推荐...</div>
+          </div>
+          <div class="panel-bottom-actions">
+            <button type="button" id="toggle-intake-result-bottom" class="collapse-button collapse-button-bottom" data-collapse-target="intake" aria-expanded="true">
+              收起详细结果
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="module-booking" class="grid section-anchor">
+        <form id="booking-form" class="panel">
+          <div class="section-heading">
+            <h2>选择医院并查看到院提醒</h2>
+            <p class="section-subtitle">生成推荐后，可以直接点选想去的医院，再看挂号时间、候诊地点和到院提醒。</p>
+          </div>
+          <label>
+            会话 ID
+            <input name="session_id" />
+          </label>
+          <label>
+            指定医院 ID（可留空，默认第一推荐）
+            <input name="hospital_id" placeholder="例如 east-care" />
+          </label>
+          <p id="booking-selection-tip" class="helper-text">上一步选择候选医院后，这里会自动填入医院 ID。</p>
+          <div class="booking-selector">
+            <div class="booking-selector-title">可选医院</div>
+            <div id="booking-candidate-list" class="booking-candidate-list muted">生成推荐后，这里会显示可点击的候选医院。</div>
+          </div>
+          <label>
+            覆盖时间偏好
+            <input name="preferred_time" placeholder="留空则沿用上一步" />
+          </label>
+          <button type="submit">执行挂号</button>
+        </form>
+
+        <div class="panel">
+          <div class="panel-topline">
+            <div class="section-heading section-heading-compact">
+              <h2>挂号结果</h2>
+              <p class="section-subtitle">会告诉您去哪个楼层、提前多久到、更适合怎么走。</p>
+            </div>
+            <button type="button" id="toggle-booking-result-top" class="collapse-button" data-collapse-target="booking" aria-expanded="true">
+              收起挂号结果
+            </button>
+          </div>
+          <div id="booking-result-summary" class="collapsed-summary muted">展开后可查看完整挂号结果。</div>
+          <div id="booking-result-wrap" class="result-wrap">
+            <div id="booking-result" class="result muted">等待挂号...</div>
+          </div>
+          <div class="panel-bottom-actions">
+            <button type="button" id="toggle-booking-result-bottom" class="collapse-button collapse-button-bottom" data-collapse-target="booking" aria-expanded="true">
+              收起挂号结果
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="module-document" class="grid section-anchor">
+        <form id="document-form" class="panel">
+          <div class="section-heading">
+            <h2>保存检查资料与后续提醒</h2>
+            <p class="section-subtitle">可以直接上传检查单照片，也可以补充文字内容，系统会帮您整理重点并给出后续提醒。</p>
+          </div>
+          <label>
+            会话 ID
+            <input name="session_id" />
+          </label>
+          <label>
+            文档标题
+            <input name="document_title" value="血常规复查报告" />
+          </label>
+          <div class="issue-status-card">
+            <div class="issue-status-title">这次检查结果看起来怎么样</div>
+            <div class="issue-status-subtitle">点击一个分类，系统会按“日期-科室/有问题或无问题”自动整理保存。</div>
+            <div class="issue-toggle" role="radiogroup" aria-label="检查结果分类">
+              <label class="issue-option issue-option-problem">
+                <input type="radio" name="issue_status" value="有问题" checked />
+                <span>有问题</span>
+              </label>
+              <label class="issue-option issue-option-normal">
+                <input type="radio" name="issue_status" value="无问题" />
+                <span>无问题</span>
+              </label>
+            </div>
+          </div>
+          <label>
+            上传检查图片
+            <input type="file" name="document_image" accept="image/*" />
+          </label>
+          <div class="upload-helper">支持上传报告照片、检查单截图或处方图片。上传图片后，系统会先保存文件，再结合文字内容整理重点。</div>
+          <div id="document-image-preview" class="image-preview muted">还没有选择图片。</div>
+          <label>
+            文字说明（可选）
+            <textarea name="document_text">东方惠民医院
+心内科
+2026-04-10
+血常规
+白细胞 7.5
+红细胞 4.6
+门诊建议：一周后复诊，按时服药。</textarea>
+          </label>
+          <button type="submit">归档文档</button>
+        </form>
+
+        <div class="panel">
+          <div class="section-heading section-heading-compact">
+            <h2>归档结果</h2>
+            <p class="section-subtitle">会自动汇总文档类型、重点内容和后续提醒。</p>
+          </div>
+          <div id="document-result" class="result muted">等待归档...</div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js?v=20260414-elder-ui-v11"></script>
+  </body>
+</html>

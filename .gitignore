@@ -1,0 +1,13 @@
+__pycache__/
+.pytest_cache/
+venv/
+.venv/
+.idea/
+.vscode/
+.env
+silvercare.db
+*.db
+*.db-journal
+*.pyc
+static/uploads/
+static/medical_records/
